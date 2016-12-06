@@ -32,12 +32,13 @@ var app = {
 
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
+        /*var parentElement = document.getElementById(id);
         var listeningElement = parentElement.querySelector('.listening');
         var receivedElement = parentElement.querySelector('.received');
 
         listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
+        receivedElement.setAttribute('style', 'display:block;');*/
+        console.log('Device Ready');
 
         console.log('Received Event: ' + id);
         var watchID = navigator.geolocation.watchPosition(app.onSuccess, app.onError, { timeout: 1000 });
@@ -52,6 +53,8 @@ var app = {
         element.innerHTML = 'Latitude: '  + position.coords.latitude      + '<br />' +
                             'Longitude: ' + position.coords.longitude     + '<br />' +
                             '<hr />'      + element.innerHTML;
+        console.log('Latitude: '  + position.coords.latitude      + ' ' +
+                    'Longitude: ' + position.coords.longitude );
     },
 
     // onError Callback receives a PositionError object

@@ -17,6 +17,26 @@
  * under the License.
  */
 var app = {
+    map:{},
+    marker:{},
+    myLatLng: {'lat': 20.6461844, 'lng': -100.3771275},
+    initMap: function() {
+      internalApp = this;
+      //var myLatLng = {lat: 20.6461844, lng: -100.3771275};
+      // Create a map object and specify the DOM element for display.
+      internalApp.map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 20.6461844, lng: -100.3771275},
+        scrollwheel: false,
+        zoom: 15
+      });
+      internalApp.marker = new google.maps.Marker({
+        position: internalApp.myLatLng,
+        /*map: internalApp.map,*/
+        title: 'Hello World!'
+      });
+      internalApp.marker.setMap(internalApp.map);
+    },
+
     // Application Constructor
     initialize: function() {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
@@ -32,12 +52,13 @@ var app = {
 
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
+        /*var parentElement = document.getElementById(id);
         var listeningElement = parentElement.querySelector('.listening');
         var receivedElement = parentElement.querySelector('.received');
 
         listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
+        receivedElement.setAttribute('style', 'display:block;');*/
+        console.log('Device Ready');
 
         console.log('Received Event: ' + id);
         var watchID = navigator.geolocation.watchPosition(app.onSuccess, app.onError, { timeout: 1000 });
@@ -49,9 +70,15 @@ var app = {
     //
     onSuccess: function(position) {
         var element = document.getElementById('geolocation');
-        element.innerHTML = 'Latitude: '  + position.coords.latitude      + '<br />' +
-                            'Longitude: ' + position.coords.longitude     + '<br />' +
-                            '<hr />'      + element.innerHTML;
+        element.innerHTML = 'Lat: '  + position.coords.latitude      + '<br />' +
+                            'Lon: ' + position.coords.longitude     + '<br /><hr />' ;
+                            //'<hr />'      + element.innerHTML;
+        console.log('Latitude: '  + position.coords.latitude      + ' ' +
+                    'Longitude: ' + position.coords.longitude );
+        app.myLatLng.lat = position.coords.latitude;
+        app.myLatLng.lng = position.coords.longitude;
+        app.myLatLng = {lat: position.coords.latitude, lng: position.coords.longitude};
+        app.refreshMarker();
     },
 
     // onError Callback receives a PositionError object
@@ -59,7 +86,17 @@ var app = {
     onError: function(error) {
         alert('code: '    + error.code    + '\n' +
               'message: ' + error.message + '\n');
-    }
+    },
+
+    refreshMarker: function(){
+      console.log('refresh marker');
+      app.marker.setPosition( new google.maps.LatLng( app.myLatLng.lat, app.myLatLng.lng ) );
+      app.map.panTo( new google.maps.LatLng( app.myLatLng.lat, app.myLatLng.lng ) );
+    },
+
+    exitFromApp: function(){
+      navigator.app.exitApp();
+    },
 };
 
 app.initialize();
