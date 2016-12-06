@@ -61,7 +61,7 @@ var app = {
         console.log('Device Ready');
 
         console.log('Received Event: ' + id);
-        var watchID = navigator.geolocation.watchPosition(app.onSuccess, app.onError, { timeout: 1000 });
+        var watchID = navigator.geolocation.watchPosition(app.onSuccess, app.onError, { maximumAge: 3000, timeout: 5000, enableHighAccuracy: true });
     },
 
     // onSuccess Callback
